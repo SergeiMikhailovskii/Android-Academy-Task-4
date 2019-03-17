@@ -1,1 +1,3 @@
-#Andoid Academy Task 4 \nWorking with threads
+# Andoid Academy Task 4 
+
+Working with threads
