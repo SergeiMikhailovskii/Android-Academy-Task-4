@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Exercise 4</string>
+    <string name="create">Create</string>
+    <string name="start">Start</string>
+    <string name="cancel">Cancel</string>
+    <string name="asynctask_activity">AsyncTask Activity</string>
+    <string name="loader_activity">Loader Activity</string>
+    <string name="threads_activity">Threads Activity</string>
+</resources>
