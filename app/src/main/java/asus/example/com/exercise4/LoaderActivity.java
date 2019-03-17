@@ -24,6 +24,7 @@ public class LoaderActivity extends AppCompatActivity implements LoaderManager.L
     @SuppressLint("StaticFieldLeak")
     private TextView counter;
     private final String TAG = getClass().getSimpleName();
+    private Loader loader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,7 @@ public class LoaderActivity extends AppCompatActivity implements LoaderManager.L
         cancelButton.setOnClickListener(listener);
         counter = findViewById(R.id.counter);
         EventBus.getDefault().register(this);
+        loader = getSupportLoaderManager().initLoader(0, null, LoaderActivity.this);
     }
 
     private View.OnClickListener listener = new View.OnClickListener() {
@@ -42,11 +44,11 @@ public class LoaderActivity extends AppCompatActivity implements LoaderManager.L
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.start_button:
-                    Loader loader = getSupportLoaderManager().initLoader(0, null, LoaderActivity.this);
                     loader.forceLoad();
                     Log.i(TAG, "Button start clicked");
                     break;
                 case R.id.cancel_button:
+                    loader.cancelLoad();
                     break;
             }
         }
@@ -58,6 +60,7 @@ public class LoaderActivity extends AppCompatActivity implements LoaderManager.L
         super.onDestroy();
     }
 
+    @SuppressLint("SetTextI18n")
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLoaderProgressEvent(MyAsyncTaskLoader.ProgressEvent event){
         counter.setText(""+event.getNumber());
@@ -108,6 +111,9 @@ public class LoaderActivity extends AppCompatActivity implements LoaderManager.L
         @Override
         public Void loadInBackground() {
             for (int i = 0; i<10;i++){
+                if (isLoadInBackgroundCanceled()){
+                    return null;
+                }
                 Log.i(getClass().getSimpleName(), "i = "+i+" in loadInBackground");
                 EventBus.getDefault().post(new ProgressEvent(i));
                 SystemClock.sleep(500);
