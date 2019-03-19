@@ -23,7 +23,6 @@ public class LoaderActivity extends AppCompatActivity implements LoaderManager.L
 
     @SuppressLint("StaticFieldLeak")
     private TextView counter;
-    private final String TAG = getClass().getSimpleName();
     private Loader loader;
 
     @Override
@@ -45,7 +44,6 @@ public class LoaderActivity extends AppCompatActivity implements LoaderManager.L
             switch (v.getId()){
                 case R.id.start_button:
                     loader.forceLoad();
-                    Log.i(TAG, "Button start clicked");
                     break;
                 case R.id.cancel_button:
                     loader.cancelLoad();
@@ -64,7 +62,6 @@ public class LoaderActivity extends AppCompatActivity implements LoaderManager.L
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLoaderProgressEvent(MyAsyncTaskLoader.ProgressEvent event){
         counter.setText(""+event.getNumber());
-        Log.i(TAG, "Value = "+event.getNumber()+" setted");
     }
 
     @NonNull
@@ -73,6 +70,7 @@ public class LoaderActivity extends AppCompatActivity implements LoaderManager.L
         return new MyAsyncTaskLoader(LoaderActivity.this);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onLoadFinished(@NonNull Loader loader, Object o) {
         counter.setText("Done!");
@@ -114,7 +112,6 @@ public class LoaderActivity extends AppCompatActivity implements LoaderManager.L
                 if (isLoadInBackgroundCanceled()){
                     return null;
                 }
-                Log.i(getClass().getSimpleName(), "i = "+i+" in loadInBackground");
                 EventBus.getDefault().post(new ProgressEvent(i));
                 SystemClock.sleep(500);
             }

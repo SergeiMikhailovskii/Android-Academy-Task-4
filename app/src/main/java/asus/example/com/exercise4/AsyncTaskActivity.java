@@ -34,20 +34,21 @@ public class AsyncTaskActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             switch (v.getId()){
-                case R.id.async_task:
+                case R.id.create_button:
                     asyncTaskClass = new AsyncTaskClass();
                     Toast.makeText(getApplicationContext(), "AsyncTask created", Toast.LENGTH_SHORT).show();
                     break;
-                case R.id.loader:
+                case R.id.start_button:
                     try {
                         asyncTaskClass.execute();
                     }catch (IllegalStateException | NullPointerException e){
                         Toast.makeText(getApplicationContext(), "You should click button CREATE before!", Toast.LENGTH_SHORT).show();
                     }
                     break;
-                case R.id.threads:
+                case R.id.cancel_button:
                     try {
                         asyncTaskClass.cancel(true);
+                        tCounter.setText("0");
                         Toast.makeText(getApplicationContext(), "AsyncTask cancelled", Toast.LENGTH_SHORT).show();
                     }catch (NullPointerException e){
                         Toast.makeText(getApplicationContext(), "You should click button CREATE before!", Toast.LENGTH_SHORT).show();
