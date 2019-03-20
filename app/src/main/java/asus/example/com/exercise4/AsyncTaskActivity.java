@@ -36,22 +36,33 @@ public class AsyncTaskActivity extends AppCompatActivity {
             switch (v.getId()){
                 case R.id.create_button:
                     asyncTaskClass = new AsyncTaskClass();
-                    Toast.makeText(getApplicationContext(), "AsyncTask created", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),
+                            getApplicationContext().getResources().getText(R.string.asynctask_created)
+                            , Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.start_button:
                     try {
                         asyncTaskClass.execute();
                     }catch (IllegalStateException | NullPointerException e){
-                        Toast.makeText(getApplicationContext(), "You should click button CREATE before!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),
+                                getApplicationContext().getResources()
+                                        .getText(R.string.null_pointer_text), Toast.LENGTH_SHORT)
+                                .show();
                     }
                     break;
                 case R.id.cancel_button:
                     try {
                         asyncTaskClass.cancel(true);
-                        tCounter.setText("0");
-                        Toast.makeText(getApplicationContext(), "AsyncTask cancelled", Toast.LENGTH_SHORT).show();
+                        tCounter.setText(getApplicationContext().getResources()
+                                .getText(R.string.start_value));
+                        Toast.makeText(getApplicationContext(), getApplicationContext()
+                                        .getResources().getText(R.string.asynctask_cancelled)
+                                , Toast.LENGTH_SHORT).show();
                     }catch (NullPointerException e){
-                        Toast.makeText(getApplicationContext(), "You should click button CREATE before!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),
+                                getApplicationContext().getResources()
+                                        .getText(R.string.null_pointer_text), Toast.LENGTH_SHORT)
+                                .show();
                     }
                     break;
             }
@@ -65,10 +76,11 @@ public class AsyncTaskActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            for (int i = 0; i<10;i++) {
+            for (int i = 0; i<getApplicationContext().getResources().getInteger(R.integer.amount);i++) {
                 try {
                     tCounter.setText(String.valueOf(i));
-                    TimeUnit.MILLISECONDS.sleep(500);
+                    TimeUnit.MILLISECONDS.sleep(getApplicationContext().getResources()
+                            .getInteger(R.integer.timeout));
                     if (isCancelled()){
                         return null;
                     }

@@ -10,7 +10,6 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -35,7 +34,8 @@ public class LoaderActivity extends AppCompatActivity implements LoaderManager.L
         cancelButton.setOnClickListener(listener);
         counter = findViewById(R.id.counter);
         EventBus.getDefault().register(this);
-        loader = getSupportLoaderManager().initLoader(0, null, LoaderActivity.this);
+        loader = getSupportLoaderManager().initLoader(0, null,
+                LoaderActivity.this);
     }
 
     private View.OnClickListener listener = new View.OnClickListener() {
@@ -70,10 +70,9 @@ public class LoaderActivity extends AppCompatActivity implements LoaderManager.L
         return new MyAsyncTaskLoader(LoaderActivity.this);
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
     public void onLoadFinished(@NonNull Loader loader, Object o) {
-        counter.setText("Done!");
+        counter.setText(getApplicationContext().getResources().getText(R.string.done));
     }
 
     @Override
@@ -108,12 +107,12 @@ public class LoaderActivity extends AppCompatActivity implements LoaderManager.L
         @Nullable
         @Override
         public Void loadInBackground() {
-            for (int i = 0; i<10;i++){
+            for (int i = 0; i<getContext().getResources().getInteger(R.integer.amount);i++){
                 if (isLoadInBackgroundCanceled()){
                     return null;
                 }
                 EventBus.getDefault().post(new ProgressEvent(i));
-                SystemClock.sleep(500);
+                SystemClock.sleep(getContext().getResources().getInteger(R.integer.timeout));
             }
             return null;
         }

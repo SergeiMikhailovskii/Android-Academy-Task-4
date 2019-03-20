@@ -3,7 +3,6 @@ package asus.example.com.exercise4;
 import android.annotation.SuppressLint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -38,7 +37,8 @@ public class ThreadActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             int i;
-                            for (i = 0; i<10;i++){
+                            for (i = 0; i<getApplicationContext().getResources()
+                                    .getInteger(R.integer.amount);i++){
                                 final int finalI = i;
                                 textCounter.post(new Runnable() {
                                     @Override
@@ -49,12 +49,12 @@ public class ThreadActivity extends AppCompatActivity {
 
                                 });
                                 try{
-                                    Thread.sleep(500);
+                                    Thread.sleep(getApplicationContext().getResources()
+                                            .getInteger(R.integer.timeout));
                                 } catch (InterruptedException e) {
                                     return;
                                 }
                                 if (thread.isInterrupted()){
-                                    Log.i(getClass().getSimpleName(), "Thread is interrupted");
                                     return;
                                 }
 
@@ -63,26 +63,36 @@ public class ThreadActivity extends AppCompatActivity {
                                 @SuppressLint("SetTextI18n")
                                 @Override
                                 public void run() {
-                                    textCounter.setText("Done");
+                                    textCounter.setText(getApplicationContext().getResources()
+                                            .getText(R.string.done));
                                 }
                             });
                         }
                     });
-                    Toast.makeText(getApplicationContext(), "Thread created!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),
+                            getApplicationContext().getResources().getText(R.string.thread_created)
+                            , Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.start_button:
                     try {
                         thread.start();
                     }catch (IllegalThreadStateException | NullPointerException e){
-                        Toast.makeText(getApplicationContext(), "You should press button Create before!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),
+                                getApplicationContext().getResources()
+                                        .getText(R.string.null_pointer_text), Toast.LENGTH_SHORT)
+                                .show();
                     }
                     break;
                 case R.id.cancel_button:
                     try {
                         thread.interrupt();
-                        textCounter.setText("0");
+                        textCounter.setText(getApplicationContext().getResources()
+                                .getText(R.string.start_value));
                     }catch (NullPointerException e){
-                        Toast.makeText(getApplicationContext(), "You should press button Create before!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),
+                                getApplicationContext().getResources()
+                                        .getText(R.string.null_pointer_text), Toast.LENGTH_SHORT)
+                                .show();
                     }
                     break;
             }

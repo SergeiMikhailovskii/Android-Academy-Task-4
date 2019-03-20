@@ -14,7 +14,8 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.async_task:
-                    Intent intent = new Intent(MainActivity.this, AsyncTaskActivity.class);
+                    Intent intent = new Intent(MainActivity.this,
+                            AsyncTaskActivity.class);
                     startActivity(intent);
                     break;
                 case R.id.loader:
