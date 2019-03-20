@@ -10,11 +10,11 @@
         android:id="@+id/async_task"
         android:layout_width="match_parent"
         android:text="@string/asynctask_activity"
-        android:layout_weight="1"
+        android:layout_weight="@integer/weight_value"
         android:layout_height="1dp"
         android:layout_marginBottom="@dimen/default_margin"
         android:layout_marginEnd="@dimen/default_margin"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="@dimen/default_margin"
         android:background="#FF0000FF"
         android:layout_marginTop="@dimen/default_margin"/>
 
@@ -23,10 +23,10 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:text="@string/loader_activity"
-        android:layout_weight="1"
+        android:layout_weight="@integer/weight_value"
         android:layout_marginBottom="@dimen/default_margin"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginEnd="@dimen/default_margin"
+        android:layout_marginStart="@dimen/default_margin"
         android:background="#ff0000"/>
 
     <Button
@@ -34,9 +34,9 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:text="@string/threads_activity"
-        android:layout_weight="1"
+        android:layout_weight="@integer/weight_value"
         android:layout_marginBottom="@dimen/default_margin"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginEnd="@dimen/default_margin"
+        android:layout_marginStart="@dimen/default_margin"
         android:background="#FFFF00"/>
 </LinearLayout>

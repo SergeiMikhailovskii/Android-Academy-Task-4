@@ -2,4 +2,5 @@
 <resources>
     <integer name="amount">10</integer>
     <integer name="timeout">500</integer>
+    <integer name="weight_value">1</integer>
 </resources>

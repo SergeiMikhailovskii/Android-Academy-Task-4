@@ -82,6 +82,7 @@ public class AsyncTaskActivity extends AppCompatActivity {
                     TimeUnit.MILLISECONDS.sleep(getApplicationContext().getResources()
                             .getInteger(R.integer.timeout));
                     if (isCancelled()){
+                        tCounter.setText(getText(R.string.start_value));
                         return null;
                     }
                 } catch (InterruptedException e) {
