@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+//форматирование и название переменных:)
 public class ThreadActivity extends AppCompatActivity {
 
     private Thread thread;

@@ -18,10 +18,14 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+
+//форматирование:)
 public class LoaderActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks {
 
+    //не нужная аннотация
     @SuppressLint("StaticFieldLeak")
     private TextView counter;
+    //название лучше более информативное, например - counterLoader
     private Loader loader;
 
     @Override
@@ -58,6 +62,8 @@ public class LoaderActivity extends AppCompatActivity implements LoaderManager.L
         super.onDestroy();
     }
 
+
+    //зачем этот метод? он нигде не используется
     @SuppressLint("SetTextI18n")
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onLoaderProgressEvent(MyAsyncTaskLoader.ProgressEvent event){
