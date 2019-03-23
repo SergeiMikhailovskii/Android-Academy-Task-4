@@ -1,6 +1,7 @@
 package asus.example.com.exercise4;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,14 +14,14 @@ import java.util.concurrent.TimeUnit;
 
 public class AsyncTaskActivity extends AppCompatActivity {
 
-    private TextView tCounter;
-    private AsyncTaskClass asyncTaskClass;
+    private TextView timeCounterText;
+    private CounterAsyncTask counterAsyncTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_threads);
-        tCounter = findViewById(R.id.counter);
+        timeCounterText = findViewById(R.id.counter);
         Button create = findViewById(R.id.create_button);
         Button start = findViewById(R.id.start_button);
         Button cancel = findViewById(R.id.cancel_button);
@@ -33,56 +34,46 @@ public class AsyncTaskActivity extends AppCompatActivity {
     private View.OnClickListener listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.create_button:
-                    asyncTaskClass = new AsyncTaskClass();
-                    Toast.makeText(getApplicationContext(),
-                            getApplicationContext().getResources().getText(R.string.asynctask_created)
-                            , Toast.LENGTH_SHORT).show();
+                    counterAsyncTask = new CounterAsyncTask();
+                    showToast(R.string.asynctask_created);
                     break;
                 case R.id.start_button:
                     try {
-                        asyncTaskClass.execute();
-                    }catch (IllegalStateException | NullPointerException e){
-                        Toast.makeText(getApplicationContext(),
-                                getApplicationContext().getResources()
-                                        .getText(R.string.null_pointer_text), Toast.LENGTH_SHORT)
-                                .show();
+                        counterAsyncTask.execute();
+                    } catch (IllegalStateException | NullPointerException e) {
+                        showToast(R.string.null_pointer_text);
                     }
                     break;
                 case R.id.cancel_button:
                     try {
-                        asyncTaskClass.cancel(true);
-                        tCounter.setText(getApplicationContext().getResources()
-                                .getText(R.string.start_value));
-                        Toast.makeText(getApplicationContext(), getApplicationContext()
-                                        .getResources().getText(R.string.asynctask_cancelled)
-                                , Toast.LENGTH_SHORT).show();
-                    }catch (NullPointerException e){
-                        Toast.makeText(getApplicationContext(),
-                                getApplicationContext().getResources()
-                                        .getText(R.string.null_pointer_text), Toast.LENGTH_SHORT)
-                                .show();
+                        counterAsyncTask.cancel(true);
+                        timeCounterText.setText(getText(R.string.start_value));
+                        showToast(R.string.asynctask_cancelled);
+                    } catch (NullPointerException e) {
+                        showToast(R.string.null_pointer_text);
                     }
                     break;
             }
         }
     };
 
-    @SuppressLint("StaticFieldLeak")
-    private class AsyncTaskClass extends AsyncTask<Void, Void, Void>{
+    private class CounterAsyncTask extends AsyncTask<Void, Integer, Void> {
 
-        final String finishText = "Done!";
+        @Override
+        protected void onPreExecute(){
+            timeCounterText.setText(R.string.start_value);
+        }
 
         @Override
         protected Void doInBackground(Void... voids) {
-            for (int i = 0; i<getApplicationContext().getResources().getInteger(R.integer.amount);i++) {
+            for (int i = 0; i < Constants.AMOUNT; i++) {
                 try {
-                    tCounter.setText(String.valueOf(i));
-                    TimeUnit.MILLISECONDS.sleep(getApplicationContext().getResources()
-                            .getInteger(R.integer.timeout));
-                    if (isCancelled()){
-                        tCounter.setText(getText(R.string.start_value));
+                    publishProgress(i);
+                    TimeUnit.MILLISECONDS.sleep(Constants.TIMEOUT);
+                    if (isCancelled()) {
+                        //timeCounterText.setText(getText(R.string.start_value));
                         return null;
                     }
                 } catch (InterruptedException e) {
@@ -93,14 +84,24 @@ public class AsyncTaskActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(Void result){
-            tCounter.setText(finishText);
+        protected void onPostExecute(Void result) {
+            timeCounterText.setText(getText(R.string.done));
         }
 
         @Override
-        protected void onCancelled(){
+        protected void onCancelled() {
             super.onCancelled();
         }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            timeCounterText.setText(values[0]+"");
+        }
+    }
+
+    private void showToast(int textId) {
+        Toast.makeText(getApplicationContext(), getText(textId), Toast.LENGTH_SHORT).show();
     }
 
 

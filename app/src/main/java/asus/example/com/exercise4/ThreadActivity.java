@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 public class ThreadActivity extends AppCompatActivity {
 
-    private Thread thread;
+    private Thread counterThread;
     private TextView textCounter;
 
     @Override
@@ -31,14 +31,14 @@ public class ThreadActivity extends AppCompatActivity {
         @SuppressLint("HandlerLeak")
         @Override
         public void onClick(View v) {
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.create_button:
-                    thread = new Thread(new Runnable() {
+                    counterThread = new Thread(new Runnable() {
                         @Override
                         public void run() {
                             int i;
-                            for (i = 0; i<getApplicationContext().getResources()
-                                    .getInteger(R.integer.amount);i++){
+                            for (i = 0; i < getApplicationContext().getResources()
+                                    .getInteger(R.integer.amount); i++) {
                                 final int finalI = i;
                                 textCounter.post(new Runnable() {
                                     @Override
@@ -48,13 +48,13 @@ public class ThreadActivity extends AppCompatActivity {
                                     }
 
                                 });
-                                try{
+                                try {
                                     Thread.sleep(getApplicationContext().getResources()
                                             .getInteger(R.integer.timeout));
                                 } catch (InterruptedException e) {
                                     return;
                                 }
-                                if (thread.isInterrupted()){
+                                if (counterThread.isInterrupted()) {
                                     return;
                                 }
 
@@ -75,8 +75,8 @@ public class ThreadActivity extends AppCompatActivity {
                     break;
                 case R.id.start_button:
                     try {
-                        thread.start();
-                    }catch (IllegalThreadStateException | NullPointerException e){
+                        counterThread.start();
+                    } catch (IllegalThreadStateException | NullPointerException e) {
                         Toast.makeText(getApplicationContext(),
                                 getApplicationContext().getResources()
                                         .getText(R.string.null_pointer_text), Toast.LENGTH_SHORT)
@@ -85,10 +85,10 @@ public class ThreadActivity extends AppCompatActivity {
                     break;
                 case R.id.cancel_button:
                     try {
-                        thread.interrupt();
+                        counterThread.interrupt();
                         textCounter.setText(getApplicationContext().getResources()
                                 .getText(R.string.start_value));
-                    }catch (NullPointerException e){
+                    } catch (NullPointerException e) {
                         Toast.makeText(getApplicationContext(),
                                 getApplicationContext().getResources()
                                         .getText(R.string.null_pointer_text), Toast.LENGTH_SHORT)

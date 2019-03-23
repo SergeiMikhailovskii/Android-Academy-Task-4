@@ -20,7 +20,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 public class LoaderActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks {
 
-    @SuppressLint("StaticFieldLeak")
     private TextView counter;
     private Loader loader;
 
@@ -41,7 +40,7 @@ public class LoaderActivity extends AppCompatActivity implements LoaderManager.L
     private View.OnClickListener listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.start_button:
                     loader.forceLoad();
                     break;
@@ -60,8 +59,8 @@ public class LoaderActivity extends AppCompatActivity implements LoaderManager.L
 
     @SuppressLint("SetTextI18n")
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onLoaderProgressEvent(MyAsyncTaskLoader.ProgressEvent event){
-        counter.setText(""+event.getNumber());
+    public void onLoaderProgressEvent(MyAsyncTaskLoader.ProgressEvent event) {
+        counter.setText("" + event.getNumber());
     }
 
     @NonNull
@@ -81,19 +80,17 @@ public class LoaderActivity extends AppCompatActivity implements LoaderManager.L
     }
 
 
-
-
     @SuppressLint("StaticFieldLeak")
     public static class MyAsyncTaskLoader extends AsyncTaskLoader<Void> {
 
-        public static class ProgressEvent{
+        public static class ProgressEvent {
             private final int number;
 
-            ProgressEvent(int number){
+            ProgressEvent(int number) {
                 this.number = number;
             }
 
-            public int getNumber(){
+            public int getNumber() {
                 return number;
             }
 
@@ -107,8 +104,8 @@ public class LoaderActivity extends AppCompatActivity implements LoaderManager.L
         @Nullable
         @Override
         public Void loadInBackground() {
-            for (int i = 0; i<getContext().getResources().getInteger(R.integer.amount);i++){
-                if (isLoadInBackgroundCanceled()){
+            for (int i = 0; i < getContext().getResources().getInteger(R.integer.amount); i++) {
+                if (isLoadInBackgroundCanceled()) {
                     return null;
                 }
                 EventBus.getDefault().post(new ProgressEvent(i));
@@ -117,9 +114,6 @@ public class LoaderActivity extends AppCompatActivity implements LoaderManager.L
             return null;
         }
     }
-
-
-
 
 
 }
