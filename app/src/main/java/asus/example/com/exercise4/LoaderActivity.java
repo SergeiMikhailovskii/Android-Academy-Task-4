@@ -81,7 +81,7 @@ public class LoaderActivity extends AppCompatActivity implements LoaderManager.L
 
 
     @SuppressLint("StaticFieldLeak")
-    public static class MyAsyncTaskLoader extends AsyncTaskLoader<Void> {
+    public static class MyAsyncTaskLoader extends AsyncTaskLoader<Void>{
 
         public static class ProgressEvent {
             private final int number;
@@ -104,12 +104,12 @@ public class LoaderActivity extends AppCompatActivity implements LoaderManager.L
         @Nullable
         @Override
         public Void loadInBackground() {
-            for (int i = 0; i < getContext().getResources().getInteger(R.integer.amount); i++) {
+            for (int i = 0; i < Constants.AMOUNT; i++) {
                 if (isLoadInBackgroundCanceled()) {
                     return null;
                 }
                 EventBus.getDefault().post(new ProgressEvent(i));
-                SystemClock.sleep(getContext().getResources().getInteger(R.integer.timeout));
+                SystemClock.sleep(Constants.TIMEOUT);
             }
             return null;
         }

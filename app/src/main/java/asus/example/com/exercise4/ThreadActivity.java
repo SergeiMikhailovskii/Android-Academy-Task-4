@@ -37,8 +37,7 @@ public class ThreadActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             int i;
-                            for (i = 0; i < getApplicationContext().getResources()
-                                    .getInteger(R.integer.amount); i++) {
+                            for (i = 0; i < Constants.AMOUNT; i++) {
                                 final int finalI = i;
                                 textCounter.post(new Runnable() {
                                     @Override
@@ -49,8 +48,7 @@ public class ThreadActivity extends AppCompatActivity {
 
                                 });
                                 try {
-                                    Thread.sleep(getApplicationContext().getResources()
-                                            .getInteger(R.integer.timeout));
+                                    Thread.sleep(Constants.TIMEOUT);
                                 } catch (InterruptedException e) {
                                     return;
                                 }
