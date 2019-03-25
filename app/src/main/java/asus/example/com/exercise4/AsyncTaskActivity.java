@@ -1,10 +1,8 @@
 package asus.example.com.exercise4;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -59,6 +57,9 @@ public class AsyncTaskActivity extends AppCompatActivity {
         }
     };
 
+    // активиди должна имплиментить интерфейс IAsyncTaskEvents
+    // чтобы потом передать его в конструктор и использовать тут
+    // все же CounterAsyncTask надо сделать статическим :)
     private class CounterAsyncTask extends AsyncTask<Void, Integer, Void>  implements IAsyncTaskEvents {
 
         @Override
@@ -83,8 +84,7 @@ public class AsyncTaskActivity extends AppCompatActivity {
             return null;
         }
 
-        @Override
-        protected void onCancelled() {
+        @Override protected void onCancelled() {
             super.onCancelled();
         }
 
@@ -100,6 +100,8 @@ public class AsyncTaskActivity extends AppCompatActivity {
         }
     }
 
+    // вынести в статический метод хелпер класса и использовать во всез других классах
+    // смотри ThreadActivity
     private void showToast(int textId) {
         Toast.makeText(getApplicationContext(), getText(textId), Toast.LENGTH_SHORT).show();
     }

@@ -1,10 +1,9 @@
 package asus.example.com.exercise4;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,6 +13,12 @@ public class MainActivity extends AppCompatActivity {
     private View.OnClickListener asyncTaskListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            //3 раза одинаковый кусок кода по открытию активити - желательно такие вещи выносить в отдельную функцию
+            // openActivity(Class clazz) {
+            // Intent intent = new Intent(MainActivity.this, class;
+            //            startActivity(intent);
+            //}
+            //как-то так
             Intent intent = new Intent(MainActivity.this, AsyncTaskActivity.class);
             startActivity(intent);
         }
@@ -40,7 +45,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        //все изменения с лисенерами - можно использовать и в других активити)
+        //аналогично
         findViewById(R.id.async_task).setOnClickListener(asyncTaskListener);
         findViewById(R.id.loader).setOnClickListener(loaderListener);
         findViewById(R.id.threads).setOnClickListener(threadListener);

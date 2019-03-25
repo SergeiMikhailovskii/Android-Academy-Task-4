@@ -18,6 +18,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+
+//Удалить EventBus
 public class LoaderActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks {
 
     private TextView counter;
@@ -80,6 +82,7 @@ public class LoaderActivity extends AppCompatActivity implements LoaderManager.L
     }
 
 
+    //аннотация не нужна тут
     @SuppressLint("StaticFieldLeak")
     public static class MyAsyncTaskLoader extends AsyncTaskLoader<Void>{
 

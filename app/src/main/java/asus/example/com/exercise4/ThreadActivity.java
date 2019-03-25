@@ -27,6 +27,7 @@ public class ThreadActivity extends AppCompatActivity {
         cancel.setOnClickListener(listener);
     }
 
+    //Ввнести лисенеры как в main activity, чтобы разделить логику
     private View.OnClickListener listener = new View.OnClickListener() {
         @SuppressLint("HandlerLeak")
         @Override
@@ -75,6 +76,8 @@ public class ThreadActivity extends AppCompatActivity {
                     try {
                         counterThread.start();
                     } catch (IllegalThreadStateException | NullPointerException e) {
+                        //Вынести метод для создания тоста в статический метод в новый класс ToastHelper
+                        // showShortToast(int resId) {...}
                         Toast.makeText(getApplicationContext(),
                                 getApplicationContext().getResources()
                                         .getText(R.string.null_pointer_text), Toast.LENGTH_SHORT)
