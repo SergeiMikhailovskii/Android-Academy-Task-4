@@ -22,77 +22,81 @@ public class ThreadActivity extends AppCompatActivity {
         Button start = findViewById(R.id.start_button);
         Button cancel = findViewById(R.id.cancel_button);
         textCounter = findViewById(R.id.counter);
-        create.setOnClickListener(listener);
-        start.setOnClickListener(listener);
-        cancel.setOnClickListener(listener);
+        create.setOnClickListener(createListener);
+        start.setOnClickListener(startListener);
+        cancel.setOnClickListener(cancelListener);
     }
 
-    private View.OnClickListener listener = new View.OnClickListener() {
-        @SuppressLint("HandlerLeak")
+
+    private View.OnClickListener createListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.create_button:
-                    counterThread = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            int i;
-                            for (i = 0; i < Constants.AMOUNT; i++) {
-                                final int finalI = i;
-                                textCounter.post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        textCounter.setText(String.valueOf(finalI));
-
-                                    }
-
-                                });
-                                try {
-                                    Thread.sleep(Constants.TIMEOUT);
-                                } catch (InterruptedException e) {
-                                    return;
-                                }
-                                if (counterThread.isInterrupted()) {
-                                    return;
-                                }
+            counterThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    int i;
+                    for (i = 0; i < Constants.AMOUNT; i++) {
+                        final int finalI = i;
+                        textCounter.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                textCounter.setText(String.valueOf(finalI));
 
                             }
-                            textCounter.post(new Runnable() {
-                                @SuppressLint("SetTextI18n")
-                                @Override
-                                public void run() {
-                                    textCounter.setText(getApplicationContext().getResources()
-                                            .getText(R.string.done));
-                                }
-                            });
+
+                        });
+                        try {
+                            Thread.sleep(Constants.TIMEOUT);
+                        } catch (InterruptedException e) {
+                            return;
+                        }
+                        if (counterThread.isInterrupted()) {
+                            return;
+                        }
+
+                    }
+                    textCounter.post(new Runnable() {
+                        @SuppressLint("SetTextI18n")
+                        @Override
+                        public void run() {
+                            textCounter.setText(getApplicationContext().getResources()
+                                    .getText(R.string.done));
                         }
                     });
-                    Toast.makeText(getApplicationContext(),
-                            getApplicationContext().getResources().getText(R.string.thread_created)
-                            , Toast.LENGTH_SHORT).show();
-                    break;
-                case R.id.start_button:
-                    try {
-                        counterThread.start();
-                    } catch (IllegalThreadStateException | NullPointerException e) {
-                        Toast.makeText(getApplicationContext(),
-                                getApplicationContext().getResources()
-                                        .getText(R.string.null_pointer_text), Toast.LENGTH_SHORT)
-                                .show();
-                    }
-                    break;
-                case R.id.cancel_button:
-                    try {
-                        counterThread.interrupt();
-                        textCounter.setText(getApplicationContext().getResources()
-                                .getText(R.string.start_value));
-                    } catch (NullPointerException e) {
-                        Toast.makeText(getApplicationContext(),
-                                getApplicationContext().getResources()
-                                        .getText(R.string.null_pointer_text), Toast.LENGTH_SHORT)
-                                .show();
-                    }
-                    break;
+                }
+            });
+            Toast.makeText(getApplicationContext(),
+                    getApplicationContext().getResources().getText(R.string.thread_created)
+                    , Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    private View.OnClickListener startListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            try {
+                counterThread.start();
+            } catch (IllegalThreadStateException | NullPointerException e) {
+                Toast.makeText(getApplicationContext(),
+                        getApplicationContext().getResources()
+                                .getText(R.string.null_pointer_text), Toast.LENGTH_SHORT)
+                        .show();
+            }
+        }
+    };
+
+    private View.OnClickListener cancelListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            try {
+                counterThread.interrupt();
+                textCounter.setText(getApplicationContext().getResources()
+                        .getText(R.string.start_value));
+            } catch (NullPointerException e) {
+                Toast.makeText(getApplicationContext(),
+                        getApplicationContext().getResources()
+                                .getText(R.string.null_pointer_text), Toast.LENGTH_SHORT)
+                        .show();
             }
         }
     };
