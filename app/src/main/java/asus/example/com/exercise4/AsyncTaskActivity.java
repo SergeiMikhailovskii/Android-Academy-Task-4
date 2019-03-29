@@ -59,10 +59,10 @@ public class AsyncTaskActivity extends AppCompatActivity {
         }
     };
 
-    private class CounterAsyncTask extends AsyncTask<Void, Integer, Void> {
+    private class CounterAsyncTask extends AsyncTask<Void, Integer, Void> implements IAsyncTaskEvents {
 
         @Override
-        protected void onPreExecute(){
+        protected void onPreExecute() {
             timeCounterText.setText(R.string.start_value);
         }
 
@@ -70,22 +70,17 @@ public class AsyncTaskActivity extends AppCompatActivity {
         protected Void doInBackground(Void... voids) {
             for (int i = 0; i < Constants.AMOUNT; i++) {
                 try {
-                    publishProgress(i);
+                    onProgressUpdate(i);
                     TimeUnit.MILLISECONDS.sleep(Constants.TIMEOUT);
                     if (isCancelled()) {
-                        //timeCounterText.setText(getText(R.string.start_value));
                         return null;
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
+            onPostExecute();
             return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            timeCounterText.setText(getText(R.string.done));
         }
 
         @Override
@@ -93,10 +88,16 @@ public class AsyncTaskActivity extends AppCompatActivity {
             super.onCancelled();
         }
 
+
         @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
-            timeCounterText.setText(values[0]+"");
+        public void onPostExecute() {
+            timeCounterText.setText(getText(R.string.done));
+        }
+
+        @SuppressLint("SetTextI18n")
+        @Override
+        public void onProgressUpdate(Integer integer) {
+            timeCounterText.setText(integer + "");
         }
     }
 

@@ -81,7 +81,7 @@ public class LoaderActivity extends AppCompatActivity implements LoaderManager.L
 
 
     @SuppressLint("StaticFieldLeak")
-    public static class MyAsyncTaskLoader extends AsyncTaskLoader<Void>{
+    public static class MyAsyncTaskLoader extends AsyncTaskLoader<Void> {
 
         public static class ProgressEvent {
             private final int number;
