@@ -59,7 +59,8 @@ public class AsyncTaskActivity extends AppCompatActivity {
         }
     };
 
-    private class CounterAsyncTask extends AsyncTask<Void, Integer, Void> implements IAsyncTaskEvents {
+
+    private class CounterAsyncTask extends AsyncTask<Void, Integer, Void>  implements IAsyncTaskEvents {
 
         @Override
         protected void onPreExecute() {
@@ -98,6 +99,7 @@ public class AsyncTaskActivity extends AppCompatActivity {
         @Override
         public void onProgressUpdate(Integer integer) {
             timeCounterText.setText(integer + "");
+
         }
     }
 
