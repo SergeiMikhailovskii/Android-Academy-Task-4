@@ -12,4 +12,5 @@
     <string name="asynctask_created">AsyncTask created</string>
     <string name="done">Done!</string>
     <string name="thread_created">Thread created!</string>
+    <string name="thread_cancelled">Thread cancelled!</string>
 </resources>

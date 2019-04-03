@@ -4,35 +4,28 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
-
-    private Intent intent;
 
 
     private View.OnClickListener asyncTaskListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(MainActivity.this, AsyncTaskActivity.class);
-            startActivity(intent);
+            openActivity(AsyncTaskActivity.class);
         }
     };
 
     private View.OnClickListener loaderListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            intent = new Intent(MainActivity.this, LoaderActivity.class);
-            startActivity(intent);
-
+            openActivity(LoaderActivity.class);
         }
     };
 
     private View.OnClickListener threadListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            intent = new Intent(MainActivity.this, ThreadActivity.class);
-            startActivity(intent);
+            openActivity(ThreadActivity.class);
         }
     };
 
@@ -44,5 +37,10 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.async_task).setOnClickListener(asyncTaskListener);
         findViewById(R.id.loader).setOnClickListener(loaderListener);
         findViewById(R.id.threads).setOnClickListener(threadListener);
+    }
+
+    private void openActivity(Class openClass){
+        Intent intent = new Intent(MainActivity.this, openClass);
+        startActivity(intent);
     }
 }
