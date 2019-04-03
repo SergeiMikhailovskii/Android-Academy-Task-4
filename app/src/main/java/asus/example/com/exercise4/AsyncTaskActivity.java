@@ -46,6 +46,7 @@ public class AsyncTaskActivity extends AppCompatActivity {
         }
     };
 
+
     private View.OnClickListener cancelListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -60,8 +61,8 @@ public class AsyncTaskActivity extends AppCompatActivity {
     };
 
 
-
     private class CounterAsyncTask extends AsyncTask<Void, Integer, Void> implements IAsyncTaskEvents {
+
 
         @Override
         protected void onPreExecute() {
@@ -101,7 +102,7 @@ public class AsyncTaskActivity extends AppCompatActivity {
         public void onProgressUpdate(Integer integer) {
             timeCounterText.setText(integer + "");
 
+
         }
     }
-
 }

@@ -22,6 +22,7 @@ public class ThreadActivity extends AppCompatActivity {
         create.setOnClickListener(createListener);
         findViewById(R.id.start_button).setOnClickListener(startListener);
         findViewById(R.id.cancel_button).setOnClickListener(cancelListener);
+
     }
 
 
@@ -63,6 +64,7 @@ public class ThreadActivity extends AppCompatActivity {
                 }
             });
             HelpToast.showToast(R.string.thread_created, getApplicationContext());
+
         }
     };
 
@@ -73,6 +75,7 @@ public class ThreadActivity extends AppCompatActivity {
                 counterThread.start();
             } catch (IllegalThreadStateException | NullPointerException e) {
                 HelpToast.showToast(R.string.null_pointer_text, getApplicationContext());
+
             }
         }
     };
@@ -88,6 +91,7 @@ public class ThreadActivity extends AppCompatActivity {
             } catch (NullPointerException e) {
                 HelpToast.showToast(R.string.null_pointer_text, getApplicationContext());
             }
+
         }
     };
 
