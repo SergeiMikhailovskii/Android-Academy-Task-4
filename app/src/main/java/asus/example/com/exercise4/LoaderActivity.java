@@ -14,9 +14,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 public class LoaderActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks {
 
@@ -32,7 +29,6 @@ public class LoaderActivity extends AppCompatActivity implements LoaderManager.L
         startButton.setOnClickListener(listener);
         cancelButton.setOnClickListener(listener);
         counter = findViewById(R.id.counter);
-        EventBus.getDefault().register(this);
         loader = getSupportLoaderManager().initLoader(0, null,
                 LoaderActivity.this);
     }
@@ -51,22 +47,29 @@ public class LoaderActivity extends AppCompatActivity implements LoaderManager.L
         }
     };
 
-    @Override
-    protected void onDestroy() {
-        EventBus.getDefault().unregister(this);
-        super.onDestroy();
-    }
 
-    @SuppressLint("SetTextI18n")
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onLoaderProgressEvent(MyAsyncTaskLoader.ProgressEvent event) {
-        counter.setText("" + event.getNumber());
-    }
+
 
     @NonNull
     @Override
     public Loader<Void> onCreateLoader(int i, @Nullable Bundle bundle) {
-        return new MyAsyncTaskLoader(LoaderActivity.this);
+        ILoaderEvents iLoaderEvents = new ILoaderEvents() {
+            @Override
+            public void onPreExecute() {
+                counter.setText(R.string.start_value);
+            }
+
+            @Override
+            public void onLoaderProgressEvent(int i) {
+                counter.setText(i+"");
+            }
+
+            @Override
+            public void onPostExecute() {
+                counter.setText(R.string.done);
+            }
+        };
+        return new MyAsyncTaskLoader(LoaderActivity.this, iLoaderEvents);
     }
 
     @Override
@@ -83,34 +86,25 @@ public class LoaderActivity extends AppCompatActivity implements LoaderManager.L
     @SuppressLint("StaticFieldLeak")
     public static class MyAsyncTaskLoader extends AsyncTaskLoader<Void> {
 
-        public static class ProgressEvent {
-            private final int number;
+        private ILoaderEvents iLoaderEvents;
 
-            ProgressEvent(int number) {
-                this.number = number;
-            }
-
-            public int getNumber() {
-                return number;
-            }
-
-        }
-
-
-        MyAsyncTaskLoader(@NonNull Context context) {
+        MyAsyncTaskLoader(@NonNull Context context, ILoaderEvents iLoaderEvents) {
             super(context);
+            this.iLoaderEvents = iLoaderEvents;
         }
 
         @Nullable
         @Override
         public Void loadInBackground() {
+            iLoaderEvents.onPreExecute();
             for (int i = 0; i < Constants.AMOUNT; i++) {
                 if (isLoadInBackgroundCanceled()) {
                     return null;
                 }
-                EventBus.getDefault().post(new ProgressEvent(i));
+                iLoaderEvents.onLoaderProgressEvent(i);
                 SystemClock.sleep(Constants.TIMEOUT);
             }
+            iLoaderEvents.onPostExecute();
             return null;
         }
     }

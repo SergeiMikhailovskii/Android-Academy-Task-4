@@ -1,6 +1,5 @@
 package asus.example.com.exercise4;
 
-import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,10 +9,11 @@ import android.widget.TextView;
 
 import java.util.concurrent.TimeUnit;
 
-public class AsyncTaskActivity extends AppCompatActivity {
+public class AsyncTaskActivity extends AppCompatActivity{
 
     private TextView timeCounterText;
     private CounterAsyncTask counterAsyncTask;
+    private IAsyncTaskEvents iAsyncTaskEvents;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,12 +25,28 @@ public class AsyncTaskActivity extends AppCompatActivity {
         create.setVisibility(View.VISIBLE);
         findViewById(R.id.start_button).setOnClickListener(startListener);
         findViewById(R.id.cancel_button).setOnClickListener(cancelListener);
+        iAsyncTaskEvents = new IAsyncTaskEvents() {
+            @Override
+            public void onPostExecute() {
+                timeCounterText.setText(R.string.done);
+            }
+
+            @Override
+            public void onProgressUpdate(Integer integer) {
+                timeCounterText.setText(integer.toString());
+            }
+
+            @Override
+            public void onPreExecute() {
+                timeCounterText.setText(R.string.start_value);
+            }
+        };
     }
 
     private View.OnClickListener createListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            counterAsyncTask = new CounterAsyncTask();
+            counterAsyncTask = new CounterAsyncTask(iAsyncTaskEvents);
             HelpToast.showToast(R.string.asynctask_created, getApplicationContext());
         }
     };
@@ -61,19 +77,21 @@ public class AsyncTaskActivity extends AppCompatActivity {
     };
 
 
-    private class CounterAsyncTask extends AsyncTask<Void, Integer, Void> implements IAsyncTaskEvents {
 
+    private static class CounterAsyncTask extends AsyncTask<Void, Integer, Void> {
 
-        @Override
-        protected void onPreExecute() {
-            timeCounterText.setText(R.string.start_value);
+        private IAsyncTaskEvents iAsyncTaskEvents;
+
+        CounterAsyncTask(IAsyncTaskEvents iAsyncTaskEvents){
+            this.iAsyncTaskEvents = iAsyncTaskEvents;
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
+            iAsyncTaskEvents.onPreExecute();
             for (int i = 0; i < Constants.AMOUNT; i++) {
                 try {
-                    onProgressUpdate(i);
+                    iAsyncTaskEvents.onProgressUpdate(i);
                     TimeUnit.MILLISECONDS.sleep(Constants.TIMEOUT);
                     if (isCancelled()) {
                         return null;
@@ -82,7 +100,7 @@ public class AsyncTaskActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-            onPostExecute();
+            iAsyncTaskEvents.onPostExecute();
             return null;
         }
 
@@ -92,17 +110,8 @@ public class AsyncTaskActivity extends AppCompatActivity {
         }
 
 
-        @Override
-        public void onPostExecute() {
-            timeCounterText.setText(getText(R.string.done));
-        }
-
-        @SuppressLint("SetTextI18n")
-        @Override
-        public void onProgressUpdate(Integer integer) {
-            timeCounterText.setText(integer + "");
 
 
-        }
+
     }
 }

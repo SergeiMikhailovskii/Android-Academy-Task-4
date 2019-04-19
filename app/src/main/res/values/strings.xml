@@ -13,4 +13,5 @@
     <string name="done">Done!</string>
     <string name="thread_created">Thread created!</string>
     <string name="thread_cancelled">Thread cancelled!</string>
+    <string name="loader_cancelled">Loader cancelled</string>
 </resources>
