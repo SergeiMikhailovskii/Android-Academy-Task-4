@@ -7,7 +7,8 @@
     <string name="loader_activity">Loader Activity</string>
     <string name="threads_activity">Threads Activity</string>
     <string name="start_value">0</string>
-    <string name="null_pointer_text">You should press button Create before!</string>
+    <string name="null_pointer_text_create">You should press button Create before!</string>
+    <string name="null_pointer_text_start">You should press button Start before!</string>
     <string name="asynctask_cancelled">AsyncTask cancelled</string>
     <string name="asynctask_created">AsyncTask created</string>
     <string name="done">Done!</string>

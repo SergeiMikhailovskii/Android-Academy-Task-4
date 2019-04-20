@@ -1,31 +1,17 @@
 package asus.example.com.exercise4;
 
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import java.util.concurrent.TimeUnit;
 
-public class AsyncTaskActivity extends AppCompatActivity{
+public class AsyncTaskActivity extends AbstractBaseActivity {
 
-    private TextView timeCounterText;
     private CounterAsyncTask counterAsyncTask;
-    private IAsyncTaskEvents iAsyncTaskEvents;
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_threads);
-        timeCounterText = findViewById(R.id.counter);
-        Button create = findViewById(R.id.create_button);
-        findViewById(R.id.create_button).setOnClickListener(createListener);
-        create.setVisibility(View.VISIBLE);
-        findViewById(R.id.start_button).setOnClickListener(startListener);
-        findViewById(R.id.cancel_button).setOnClickListener(cancelListener);
-        iAsyncTaskEvents = new IAsyncTaskEvents() {
+    public void onButtonCreateClick() {
+        IAsyncTaskEvents iAsyncTaskEvents = new IAsyncTaskEvents() {
             @Override
             public void onPostExecute() {
                 timeCounterText.setText(R.string.done);
@@ -41,48 +27,41 @@ public class AsyncTaskActivity extends AppCompatActivity{
                 timeCounterText.setText(R.string.start_value);
             }
         };
+        counterAsyncTask = new CounterAsyncTask(iAsyncTaskEvents);
+        HelpToast.showToast(R.string.asynctask_created, getApplicationContext());
     }
 
-    private View.OnClickListener createListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            counterAsyncTask = new CounterAsyncTask(iAsyncTaskEvents);
-            HelpToast.showToast(R.string.asynctask_created, getApplicationContext());
+    @Override
+    public void onButtonStartClick() {
+        try {
+            counterAsyncTask.execute();
+        } catch (IllegalStateException | NullPointerException e) {
+            HelpToast.showToast(R.string.null_pointer_text_create, getApplicationContext());
         }
-    };
+    }
 
-    private View.OnClickListener startListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            try {
-                counterAsyncTask.execute();
-            } catch (IllegalStateException | NullPointerException e) {
-                HelpToast.showToast(R.string.null_pointer_text, getApplicationContext());
-            }
+    @Override
+    public void onButtonCancelClick() {
+        try {
+            counterAsyncTask.cancel(true);
+            timeCounterText.setText(getText(R.string.start_value));
+            HelpToast.showToast(R.string.asynctask_cancelled, getApplicationContext());
+        } catch (NullPointerException e) {
+            HelpToast.showToast(R.string.null_pointer_text_create, getApplicationContext());
         }
-    };
+    }
 
-
-    private View.OnClickListener cancelListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            try {
-                counterAsyncTask.cancel(true);
-                timeCounterText.setText(getText(R.string.start_value));
-                HelpToast.showToast(R.string.asynctask_cancelled, getApplicationContext());
-            } catch (NullPointerException e) {
-                HelpToast.showToast(R.string.null_pointer_text, getApplicationContext());
-            }
-        }
-    };
-
+    @Override
+    public boolean isCreateButtonVisible() {
+        return true;
+    }
 
 
     private static class CounterAsyncTask extends AsyncTask<Void, Integer, Void> {
 
         private IAsyncTaskEvents iAsyncTaskEvents;
 
-        CounterAsyncTask(IAsyncTaskEvents iAsyncTaskEvents){
+        CounterAsyncTask(IAsyncTaskEvents iAsyncTaskEvents) {
             this.iAsyncTaskEvents = iAsyncTaskEvents;
         }
 
@@ -108,9 +87,6 @@ public class AsyncTaskActivity extends AppCompatActivity{
         protected void onCancelled() {
             super.onCancelled();
         }
-
-
-
 
 
     }
